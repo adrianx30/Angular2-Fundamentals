@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core'
 import { EventService } from './shared/event.service';
+import { ToastrService } from '../common/toastr.service';
 
 @Component({
     selector: 'events-list',
@@ -9,14 +10,15 @@ import { EventService } from './shared/event.service';
         <hr/>
         <div class="row">
             <div *ngFor="let event of events" class="col-md-5">
-                <event-thumbnail #thumbnail  [event]
-                ="event"></event-thumbnail> 
+                <event-thumbnail #thumbnail (click)="handleThumbnailClick(event.name)" 
+                    [event] ="event"></event-thumbnail> 
+                
                 <!--//inside the above tag (eventClick)="handleEventClickced($event)" --> 
                 <!--<h3>{{thumbnail.someProperty}}</h3>
                 <button class="btn btn-primary" (click)="thumbnail.logFoo()">
                 Log me some foo </button>-->
             </div>
-        </div>      
+        </div>             
     </div>
     `
 })
@@ -25,19 +27,22 @@ import { EventService } from './shared/event.service';
 export class EventsListComponent implements OnInit {
 
     events:any[]
-    constructor(private eventService: EventService){
-        
+
+    constructor(private eventService:EventService, private toastr:ToastrService){        
     }
 
     ngOnInit(){
         this.events = this.eventService.getEvents()
     }
 
+    handleThumbnailClick(eventName){
+        //console.log('Testing...')
+        this.toastr.success(eventName)
+    }
+
     /*
     handleEventClickced(data){
         console.log('received:', data)
     }
-    */
-
-    
+    */    
 }
